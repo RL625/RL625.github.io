@@ -287,7 +287,7 @@
         </div>
 
         <div class="form-group" id="nonSelfSubGroup">
-            <label>租金標準選擇</label>
+            <label>類別</label>
             <select id="nonSelfSubUsage">
                 <option value="standard_rent">出租申報租賃所得且達租金標準</option>
                 <option value="below_standard">未申報租賃所得或申報租金未達標準等其他住家用房屋</option>
@@ -555,7 +555,7 @@
                 ` : type === 'residential' && resUsage === 'non_self' ? `
                     <p>住家用途：非自住</p>
                     <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
-                    ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>租金標準選擇：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
+                    ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>類別：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
                     ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住持有戶數：${nonSelfHouseholds} 戶</p>` : ''}
                     <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateSelf ? `(法定稅率 ${taxRateNonSelf}%)` : ''}</p>
                 ` : `
