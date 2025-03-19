@@ -264,7 +264,7 @@
             <label id="nonSelfLabel">非自住類型</label>
             <select id="nonSelfUsage">
                 <option value="rent_standard">出租申報租賃所得達租金標準（臺北市112年度租金標準為房屋現值27%）</option>
-                <option value="inherited_shared">繼承取得（分別）共有房屋（單獨持有房屋除外）</option>
+                <option value="inherited_shared">繼承取得分別共有房屋（繼承取得單獨持有房屋不在此限）</option>
                 <option value="developer">起造人持有待銷售房屋</option>
                 <option value="other_residential">其他住家用房屋（含空置房屋、地下租賃房屋等）</option>
                 <option value="social_rent_public">公益出租人及包租代管房屋稅優惠 - 公益出租人</option>
@@ -289,8 +289,8 @@
         <div class="form-group" id="nonSelfSubGroup">
             <label>租金標準選擇</label>
             <select id="nonSelfSubUsage">
-                <option value="standard">達租金標準</option>
-                <option value="below_standard">未達租金標準</option>
+                <option value="standard">出租申報租賃所得且達租金標準</option>
+                <option value="below_standard">未申報租賃所得或申報租金未達標準等其他住家用房屋</option>
             </select>
             <div class="hint">臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。</div>
         </div>
