@@ -291,7 +291,6 @@
             <select id="nonSelfSubUsage">
                 <option value="standard_rent">出租申報租賃所得且達租金標準</option>
                 <option value="below_standard">未申報租賃所得或申報租金未達標準等其他住家用房屋</option>
-                <option value="inherited_co_owned" class="co-owned-option" style="display: none;">繼承取得公同共有房屋</option>
             </select>
             <div id="nonSelfSubHint" class="hint">
                 臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。
@@ -380,15 +379,33 @@
                 'industrial_park', 'leasing_management'
             ];
 
-            // 動態控制「繼承取得公同共有房屋」選項的顯示
-            const coOwnedOption = document.querySelector('.co-owned-option');
+            // 動態生成「類別」欄位的選項
+            const currentValue = nonSelfSubUsage.value; // 儲存當前選擇的值
+            nonSelfSubUsage.innerHTML = ''; // 清空現有選項
+            // 添加基本選項
+            const standardRentOption = document.createElement('option');
+            standardRentOption.value = 'standard_rent';
+            standardRentOption.textContent = '出租申報租賃所得且達租金標準';
+            nonSelfSubUsage.appendChild(standardRentOption);
+
+            const belowStandardOption = document.createElement('option');
+            belowStandardOption.value = 'below_standard';
+            belowStandardOption.textContent = '未申報租賃所得或申報租金未達標準等其他住家用房屋';
+            nonSelfSubUsage.appendChild(belowStandardOption);
+
+            // 如果是「公同共有房屋」，添加「繼承取得公同共有房屋」選項
             if (nonSelfType === 'co_owned') {
-                coOwnedOption.style.display = 'block';
+                const inheritedCoOwnedOption = document.createElement('option');
+                inheritedCoOwnedOption.value = 'inherited_co_owned';
+                inheritedCoOwnedOption.textContent = '繼承取得公同共有房屋';
+                nonSelfSubUsage.appendChild(inheritedCoOwnedOption);
+            }
+
+            // 恢復之前選擇的值（如果該值仍然有效）
+            if (Array.from(nonSelfSubUsage.options).some(option => option.value === currentValue)) {
+                nonSelfSubUsage.value = currentValue;
             } else {
-                coOwnedOption.style.display = 'none';
-                if (nonSelfSubUsage.value === 'inherited_co_owned') {
-                    nonSelfSubUsage.value = 'standard_rent'; // 預設回到第一個選項
-                }
+                nonSelfSubUsage.value = 'standard_rent'; // 預設選擇第一個選項
             }
 
             if (type === 'residential') {
@@ -475,7 +492,7 @@
                     taxRateSelf = 1.0;
                     effectiveTaxRateSelf = 0.7;
                     selfHouseholds = 1;
-                    warnings.push('適用前提：房屋現值須低於2,842,000元。');
+                    warnings.push('適用前提：房屋現值須低於2,842,000元，若超過此金額，稅率可能不同。');
                     warnings.push('除原有自住要件外，應於每年3月22日前有本人、配偶或直系親屬辦竣戶籍登記。');
                     warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
                 } else if (resUsage === 'self') {
