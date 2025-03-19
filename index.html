@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>臺北市房屋稅率試算器</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@500&family=SF+Pro+Text:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 540px;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-family: 'SF Pro Display', sans-serif;
+            font-size: 32px;
+            font-weight: 500;
+            color: #1d1d1f;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 16px;
+            color: #6e6e73;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .form-group.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #007aff;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        input[disabled] {
+            background: #e8e8ed;
+            color: #86868b;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #007aff;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        button:hover {
+            background: #0066cc;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f5f5f7;
+            display: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        #result h3 {
+            font-family: 'SF Pro Display', sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        #result p {
+            font-size: 15px;
+            color: #1d1d1f;
+            margin: 6px 0;
+        }
+
+        #result strong {
+            color: #ff3b30;
+            font-weight: 500;
+        }
+
+        .warning {
+            color: #ff3b30;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .warning ul {
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+
+        .warning li {
+            margin: 3px 0;
+        }
+
+        .hint {
+            color: #ff3b30;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .links-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f5f5f7;
+            border-radius: 10px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .links-section h3 {
+            font-family: 'SF Pro Display', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .links-section .link-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px;
+            background: none;
+            color: #007aff;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+            justify-content: center;
+        }
+
+        .links-section .link-button:hover {
+            color: #0066cc;
+        }
+
+        .links-section .download-button {
+            color: #007aff;
+        }
+
+        .links-section .download-button:hover {
+            color: #0066cc;
+        }
+
+        .links-section .link-button .icon {
+            margin-right: 8px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .links-section .link-button:hover .icon {
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            p.subtitle {
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>臺北市房屋稅率試算器</h1>
+        <p class="subtitle">適用於自113年7月1日起</p>
+
+        <div class="form-group active" id="typeGroup">
+            <label>房屋使用情形</label>
+            <select id="type">
+                <option value="residential">住家用</option>
+                <option value="non_residential">非住家用</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="residentialGroup">
+            <label>住家用途</label>
+            <select id="residentialUsage">
+                <option value="single_self">全國單一自住（現值低於2,842,000元）</option>
+                <option value="self">自住用</option>
+                <option value="non_self">非自住</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="nonSelfGroup">
+            <label id="nonSelfLabel">非自住類型</label>
+            <select id="nonSelfUsage">
+                <option value="rent_standard">出租申報租賃所得達租金標準（臺北市112年度租金標準為房屋現值27%）</option>
+                <option value="inherited_shared">繼承取得分別共有房屋（單獨持有房屋除外）</option>
+                <option value="developer">起造人持有待銷售房屋</option>
+                <option value="other_residential">其他住家用房屋（含空置房屋、地下租賃房屋等）</option>
+                <option value="social_rent_public">公益出租人及包租代管房屋稅優惠 - 公益出租人</option>
+                <option value="social_rent_package">公益出租人及包租代管房屋稅優惠 - 社會住宅包租代管房屋（修法中）</option>
+                <option value="personal_rent">公益出租人及包租代管房屋稅優惠 - 個人租賃住宅包租代管房屋</option>
+                <option value="public_housing">公有房屋</option>
+                <option value="worker_dorm">勞工宿舍及其附設員工餐廳（需勞工主管機關證明）</option>
+                <option value="shared_part">區分所有建築物共有部分（領有單獨建物所有權狀）</option>
+                <option value="parking_space">專供停放車輛使用之停車空間</option>
+                <option value="co_owned">公同共有房屋</option>
+                <option value="care_facility">長期照顧服務機構及老人福利機構住宿房屋</option>
+                <option value="cultural_asset">文化資產保存法登錄之聚落建築群、史蹟及文化景觀</option>
+                <option value="public_construction">民間參與公共建設案之公共建設或附屬事業</option>
+                <option value="damaged_house">焚燬、坍塌、拆除至不堪居住程度之房屋</option>
+                <option value="disaster_relief">災區受災居民居住使用之房屋（財政部核定）</option>
+                <option value="industrial_park">產業園區住宅（依規定出租使用）</option>
+                <option value="leasing_management">法人住宅委託租賃住宅代管業或包租業轉租</option>
+            </select>
+            <div id="nonSelfHint" class="hint"></div>
+        </div>
+
+        <div class="form-group" id="nonSelfSubGroup">
+            <label>租金標準選擇</label>
+            <select id="nonSelfSubUsage">
+                <option value="standard">達租金標準</option>
+                <option value="below_standard">未達租金標準</option>
+            </select>
+            <div class="hint">臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000，租金標準（每月）為6,750元，高於6,750則適用1.5%，低於則適用2%。</div>
+        </div>
+
+        <div class="form-group" id="nonResidentialGroup">
+            <label>非住家用途</label>
+            <select id="nonResidentialUsage">
+                <option value="business">供營業用</option>
+                <option value="medical_office">供私人醫院、診所或自由職業事務所使用</option>
+                <option value="non_profit">供人民團體等非營業使用</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="householdsGroup">
+            <label>全國持有戶數</label>
+            <input type="number" id="households" min="1" value="1">
+            <div id="householdsHint" class="hint"></div>
+        </div>
+
+        <div class="form-group" id="yearsGroup">
+            <label>持有年數（年）</label>
+            <input type="number" id="years" min="0" value="0">
+        </div>
+
+        <button onclick="calculateTax()">計算稅率</button>
+
+        <div id="result"></div>
+
+        <div class="links-section">
+            <h3>申辦連結</h3>
+            <div class="links-container">
+                <a href="https://service.gov.taipei/Case/ApplyWay/201907120329" target="_blank" class="link-button">
+                    <span class="icon">🔗</span> 市民服務大平臺
+                </a>
+                <a href="https://www.etax.nat.gov.tw/etwmain/etw109w/cases/services/OLF015015/0" target="_blank" class="link-button">
+                    <span class="icon">🔗</span> 財政部稅務入口網
+                </a>
+                <a href="https://net.tax.nat.gov.tw/PLRX/Lrx200d01/" target="_blank" class="link-button">
+                    <span class="icon">🔗</span> 地方稅網路申報作業
+                </a>
+                <a href="https://www-ws.gov.taipei/001/Upload/336/relfile/16016/108633/78e628f5-a6e6-4dc0-97ec-4861f69d6554.odt" target="_blank" class="link-button download-button">
+                    <span class="icon">📥</span> 申請書下載
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const typeSelect = document.getElementById('type');
+        const residentialGroup = document.getElementById('residentialGroup');
+        const nonSelfGroup = document.getElementById('nonSelfGroup');
+        const nonSelfSubGroup = document.getElementById('nonSelfSubGroup');
+        const nonResidentialGroup = document.getElementById('nonResidentialGroup');
+        const residentialUsage = document.getElementById('residentialUsage');
+        const nonSelfUsage = document.getElementById('nonSelfUsage');
+        const nonSelfSubUsage = document.getElementById('nonSelfSubUsage');
+        const nonSelfLabel = document.getElementById('nonSelfLabel');
+        const householdsGroup = document.getElementById('householdsGroup');
+        const yearsGroup = document.getElementById('yearsGroup');
+        const householdsInput = document.getElementById('households');
+        const householdsHint = document.getElementById('householdsHint');
+        const nonSelfHint = document.getElementById('nonSelfHint');
+
+        function updateForm() {
+            const type = typeSelect.value;
+            const resUsage = residentialUsage.value;
+            const nonSelfType = nonSelfUsage.value;
+            const households = parseInt(householdsInput.value) || 1;
+
+            residentialGroup.classList.remove('active');
+            nonSelfGroup.classList.remove('active');
+            nonSelfSubGroup.classList.remove('active');
+            nonResidentialGroup.classList.remove('active');
+            householdsGroup.classList.remove('active');
+            yearsGroup.classList.remove('active');
+            householdsHint.textContent = '';
+            nonSelfHint.textContent = '';
+
+            const nonCountedTypes = [
+                'social_rent_public', 'social_rent_package', 'personal_rent', 'public_housing',
+                'worker_dorm', 'shared_part', 'parking_space', 'co_owned', 'care_facility',
+                'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
+                'industrial_park', 'leasing_management'
+            ];
+
+            if (type === 'residential') {
+                residentialGroup.classList.add('active');
+                if (resUsage === 'self') {
+                    householdsGroup.classList.add('active');
+                    householdsInput.disabled = false;
+                    householdsInput.max = '';
+                    householdsHint.textContent = '自住用全國限3戶內，超過3戶的部分將歸類為非自住房屋';
+                    if (households > 3) {
+                        nonSelfGroup.classList.add('active');
+                        nonSelfLabel.textContent = '非自住類型（超過3戶部分）';
+                        if (nonSelfType === 'developer') {
+                            yearsGroup.classList.add('active');
+                            householdsGroup.classList.remove('active');
+                        } else if (nonCountedTypes.includes(nonSelfType)) {
+                            householdsGroup.classList.remove('active');
+                            yearsGroup.classList.remove('active');
+                        } else {
+                            yearsGroup.classList.remove('active');
+                            householdsGroup.classList.add('active');
+                        }
+                        if (nonCountedTypes.includes(nonSelfType)) {
+                            nonSelfHint.textContent = '持有戶數不計入全國歸戶';
+                        }
+                        if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
+                            nonSelfSubGroup.classList.add('active');
+                        } else {
+                            nonSelfSubGroup.classList.remove('active');
+                        }
+                    }
+                } else if (resUsage === 'single_self') {
+                    householdsGroup.classList.add('active');
+                    householdsInput.value = 1;
+                    householdsInput.disabled = true;
+                    householdsHint.textContent = '全國僅1戶';
+                } else if (resUsage === 'non_self') {
+                    nonSelfGroup.classList.add('active');
+                    nonSelfLabel.textContent = '非自住類型';
+                    if (nonSelfType === 'developer') {
+                        yearsGroup.classList.add('active');
+                        householdsGroup.classList.remove('active');
+                    } else if (nonCountedTypes.includes(nonSelfType)) {
+                        householdsGroup.classList.remove('active');
+                        yearsGroup.classList.remove('active');
+                    } else {
+                        yearsGroup.classList.remove('active');
+                        householdsGroup.classList.add('active');
+                        householdsInput.disabled = false;
+                        householdsInput.max = '';
+                    }
+                    if (nonCountedTypes.includes(nonSelfType)) {
+                        nonSelfHint.textContent = '持有戶數不計入全國歸戶';
+                    }
+                    if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
+                        nonSelfSubGroup.classList.add('active');
+                    } else {
+                        nonSelfSubGroup.classList.remove('active');
+                    }
+                }
+            } else if (type === 'non_residential') {
+                nonResidentialGroup.classList.add('active');
+            }
+        }
+
+        typeSelect.addEventListener('change', updateForm);
+        residentialUsage.addEventListener('change', updateForm);
+        nonSelfUsage.addEventListener('change', updateForm);
+        nonSelfSubUsage.addEventListener('change', updateForm);
+        householdsInput.addEventListener('input', updateForm);
+        updateForm();
+
+        function calculateTax() {
+            const type = typeSelect.value;
+            const resUsage = residentialUsage.value;
+            const nonSelfType = nonSelfUsage.value;
+            const nonSelfSubType = nonSelfSubUsage.value;
+            const nonResUsage = document.getElementById('nonResidentialUsage').value;
+            let households = parseInt(document.getElementById('households').value);
+            const years = parseInt(document.getElementById('years').value);
+            let taxRateSelf = 0;
+            let effectiveTaxRateSelf = 0;
+            let taxRateNonSelf = 0;
+            let effectiveTaxRateNonSelf = 0;
+            let warnings = [];
+            let selfHouseholds = 0;
+            let nonSelfHouseholds = 0;
+            let totalHouseholdsForNonSelf = households;
+
+            const nonCountedTypes = [
+                'social_rent_public', 'social_rent_package', 'personal_rent', 'public_housing',
+                'worker_dorm', 'shared_part', 'parking_space', 'co_owned', 'care_facility',
+                'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
+                'industrial_park', 'leasing_management'
+            ];
+
+            if (type === 'residential') {
+                if (resUsage === 'single_self') {
+                    taxRateSelf = 1.0;
+                    effectiveTaxRateSelf = 0.7;
+                    selfHouseholds = 1;
+                    warnings.push('適用前提：房屋現值須低於2,842,000元，若超過此金額，稅率可能不同。');
+                    warnings.push('除原有自住要件外，應於每年3月22日前有本人、配偶或直系親屬辦竣戶籍登記。');
+                    warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
+                } else if (resUsage === 'self') {
+                    taxRateSelf = 1.2;
+                    if (households <= 3) {
+                        selfHouseholds = households;
+                        warnings.push('除原有自住要件外，應於每年3月22日前有本人、配偶或直系親屬辦竣戶籍登記。');
+                        warnings.push('自住用全國限3戶內。');
+                        warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
+                    } else {
+                        selfHouseholds = 3;
+                        nonSelfHouseholds = households - 3;
+                        if (nonCountedTypes.includes(nonSelfType)) {
+                            totalHouseholdsForNonSelf = 0;
+                            nonSelfHouseholds = 0;
+                        } else {
+                            totalHouseholdsForNonSelf = households;
+                        }
+
+                        if (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared') {
+                            if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 1.5;
+                            else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 2.0;
+                            else taxRateNonSelf = 2.4;
+                            effectiveTaxRateNonSelf = taxRateNonSelf;
+                        } else if (nonSelfType === 'developer') {
+                            if (years <= 1) taxRateNonSelf = 2.0;
+                            else if (years <= 2) taxRateNonSelf = 2.4;
+                            else if (years <= 4) taxRateNonSelf = 3.6;
+                            else if (years <= 5) taxRateNonSelf = 4.2;
+                            else taxRateNonSelf = 4.8;
+                            effectiveTaxRateNonSelf = taxRateNonSelf;
+                            warnings.push('起造人持有待銷售房屋按持有年數訂定差別稅率');
+                        } else if (nonSelfType === 'other_residential') {
+                            if (totalHouseholdsForNonSelf <= 2) taxRateNonSelf = 3.2;
+                            else if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 3.8;
+                            else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 4.2;
+                            else taxRateNonSelf = 4.8;
+                            effectiveTaxRateNonSelf = taxRateNonSelf;
+                        } else if (nonSelfType === 'social_rent_public') {
+                            taxRateNonSelf = 1.2;
+                            effectiveTaxRateNonSelf = 0.75;
+                            warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
+                        } else if (nonSelfType === 'social_rent_package') {
+                            taxRateNonSelf = 1.2;
+                            effectiveTaxRateNonSelf = 0.75;
+                            warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
+                            warnings.push('<span class="warning">臺北市社會住宅興辦及公益出租人出租房屋減免地價稅及房屋稅自治條例刻修法中，依臺北市政府113年9月5日預告修正該自治條例修正草案，擬將本市社會住宅包租代管房屋稅減徵比例，由減徵稅額20%，調整為適用減徵之特定稅率即1.2%。</span>');
+                        } else if (nonSelfType === 'personal_rent') {
+                            taxRateNonSelf = nonSelfSubType === 'standard' ? 1.5 : 2.0;
+                            effectiveTaxRateNonSelf = taxRateNonSelf * 0.6;
+                        } else if (nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
+                            taxRateNonSelf = nonSelfSubType === 'standard' ? 1.5 : 2.0;
+                            effectiveTaxRateNonSelf = taxRateNonSelf;
+                            warnings.push('依財政部113年4月22日台財稅字第11300522190號令訂定「房屋稅條例第五條與第十五條第一項第九款規定住家用房屋戶數認定及申報擇定辦法」第4條及該部同年10月30日台財稅字第11304654260號令公布之不計入全國戶數之住家用房屋類型。');
+                        }
+                        if (nonSelfHouseholds > 0 && warnings.length === 0 && nonSelfType !== 'developer') {
+                            warnings.push('全國持有戶數超過3戶，超過部分已歸類為非自住房屋。');
+                        }
+                    }
+                } else if (resUsage === 'non_self') {
+                    if (!nonCountedTypes.includes(nonSelfType)) {
+                        nonSelfHouseholds = households;
+                        totalHouseholdsForNonSelf = households;
+                    } else {
+                        nonSelfHouseholds = 0;
+                        totalHouseholdsForNonSelf = 0;
+                    }
+
+                    if (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared') {
+                        if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 1.5;
+                        else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 2.0;
+                        else taxRateNonSelf = 2.4;
+                        effectiveTaxRateNonSelf = taxRateNonSelf;
+                    } else if (nonSelfType === 'developer') {
+                        if (years <= 1) taxRateNonSelf = 2.0;
+                        else if (years <= 2) taxRateNonSelf = 2.4;
+                        else if (years <= 4) taxRateNonSelf = 3.6;
+                        else if (years <= 5) taxRateNonSelf = 4.2;
+                        else taxRateNonSelf = 4.8;
+                        effectiveTaxRateNonSelf = taxRateNonSelf;
+                        warnings.push('起造人持有待銷售房屋按持有年數訂定差別稅率');
+                    } else if (nonSelfType === 'other_residential') {
+                        if (totalHouseholdsForNonSelf <= 2) taxRateNonSelf = 3.2;
+                        else if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 3.8;
+                        else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 4.2;
+                        else taxRateNonSelf = 4.8;
+                        effectiveTaxRateNonSelf = taxRateNonSelf;
+                    } else if (nonSelfType === 'social_rent_public') {
+                        taxRateNonSelf = 1.2;
+                        effectiveTaxRateNonSelf = 0.75;
+                        warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
+                    } else if (nonSelfType === 'social_rent_package') {
+                        taxRateNonSelf = 1.2;
+                        effectiveTaxRateNonSelf = 0.75;
+                        warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
+                        warnings.push('<span class="warning">臺北市社會住宅興辦及公益出租人出租房屋減免地價稅及房屋稅自治條例刻修法中，依臺北市政府113年9月5日預告修正該自治條例修正草案，擬將本市社會住宅包租代管房屋稅減徵比例，由減徵稅額20%，調整為適用減徵之特定稅率即1.2%。</span>');
+                    } else if (nonSelfType === 'personal_rent') {
+                        taxRateNonSelf = nonSelfSubType === 'standard' ? 1.5 : 2.0;
+                        effectiveTaxRateNonSelf = taxRateNonSelf * 0.6;
+                    } else if (nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
+                        taxRateNonSelf = nonSelfSubType === 'standard' ? 1.5 : 2.0;
+                        effectiveTaxRateNonSelf = taxRateNonSelf;
+                        warnings.push('依財政部113年4月22日台財稅字第11300522190號令訂定「房屋稅條例第五條與第十五條第一項第九款規定住家用房屋戶數認定及申報擇定辦法」第4條及該部同年10月30日台財稅字第11304654260號令公布之不計入全國戶數之住家用房屋類型。');
+                    }
+                }
+            } else if (type === 'non_residential') {
+                if (nonResUsage === 'business') taxRateNonSelf = 3.0;
+                else if (nonResUsage === 'medical_office') taxRateNonSelf = 3.0;
+                else if (nonResUsage === 'non_profit') taxRateNonSelf = 2.0;
+                effectiveTaxRateNonSelf = taxRateNonSelf;
+                nonSelfHouseholds = 0;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>計算結果</h3>
+                <p>房屋使用情形：${type === 'residential' ? '住家用' : '非住家用'}</p>
+                ${type === 'residential' && resUsage === 'self' ? `
+                    <p>住家用途：自住用</p>
+                    <p>自住用戶數：${selfHouseholds} 戶，適用稅率：<strong>${taxRateSelf}%</strong></p>
+                    ${nonSelfHouseholds > 0 ? `
+                        ${nonSelfType !== 'developer' ? `<p>非自住用戶數：${nonSelfHouseholds} 戶</p>` : ''}
+                        <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
+                        ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>租金標準選擇：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
+                        <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf ? `(法定稅率 ${taxRateNonSelf}%)` : ''}</p>
+                    ` : ''}
+                ` : type === 'residential' && resUsage === 'single_self' ? `
+                    <p>住家用途：全國單一自住（現值低於2,842,000元）</p>
+                    <p>自住用戶數：${selfHouseholds} 戶，適用稅率：<strong>${effectiveTaxRateSelf}%</strong> ${effectiveTaxRateSelf !== taxRateSelf ? `(法定稅率 ${taxRateSelf}%)` : ''}</p>
+                ` : type === 'residential' && resUsage === 'non_self' ? `
+                    <p>住家用途：非自住</p>
+                    <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
+                    ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>租金標準選擇：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
+                    ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住戶數：${nonSelfHouseholds} 戶</p>` : ''}
+                    <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf ? `(法定稅率 ${taxRateNonSelf}%)` : ''}</p>
+                ` : `
+                    <p>非住家用途：${document.getElementById('nonResidentialUsage').options[document.getElementById('nonResidentialUsage').selectedIndex].text}</p>
+                    <p>適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong></p>
+                `}
+                ${(nonSelfType === 'developer') ? `<p>持有年數：${years} 年</p>` : ''}
+                ${warnings.length > 0 ? `
+                    <p class="warning">
+                        ${warnings.length > 1 ? `
+                            <ul>
+                                ${warnings.map(w => `<li>${w}</li>`).join('')}
+                            </ul>
+                        ` : warnings[0]}
+                    </p>
+                ` : ''}
+            `;
+        }
+    </script>
+</body>
+</html>
