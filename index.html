@@ -289,10 +289,12 @@
         <div class="form-group" id="nonSelfSubGroup">
             <label>租金標準選擇</label>
             <select id="nonSelfSubUsage">
-                <option value="standard">出租申報租賃所得且達租金標準</option>
+                <option value="standard">出租申報租賃所得且達租金標準或繼承取得共有</option>
                 <option value="below_standard">未申報租賃所得或申報租金未達標準等其他住家用房屋</option>
             </select>
-            <div class="hint">臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。</div>
+            <div id="nonSelfSubHint" class="hint">
+                臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。
+            </div>
         </div>
 
         <div class="form-group" id="nonResidentialGroup">
@@ -353,6 +355,7 @@
         const householdsInput = document.getElementById('households');
         const householdsHint = document.getElementById('householdsHint');
         const nonSelfHint = document.getElementById('nonSelfHint');
+        const nonSelfSubHint = document.getElementById('nonSelfSubHint');
 
         function updateForm() {
             const type = typeSelect.value;
@@ -414,6 +417,10 @@
                     }
                     if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
                         nonSelfSubGroup.classList.add('active');
+                        nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。';
+                        if (nonSelfType === 'co_owned') {
+                            nonSelfSubHint.textContent += ' 繼承取得公同共有房屋稅率為1.5%。';
+                        }
                     } else {
                         nonSelfSubGroup.classList.remove('active');
                     }
@@ -525,7 +532,7 @@
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
                 <h3>計算結果</h3>
-                <p>房屋使用情形：${type === 'residential' ? '住家用' : '非住家用'}</p>
+                <p 房屋使用情形：${type === 'residential' ? '住家用' : '非住家用'}</p>
                 ${type === 'residential' && resUsage === 'self' ? `
                     <p>住家用途：自住用</p>
                     <p>自住用持有戶數：${selfHouseholds} 戶，適用稅率：<strong>${taxRateSelf}%</strong></p>
