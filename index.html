@@ -308,7 +308,7 @@
 
         <div class="form-group" id="householdsGroup">
             <label>持有戶數</label>
-            <input type="number" id="households" min="1" max="3" value="1">
+            <input type="number" id="households" min="1" max="3" value="0">
             <div id="householdsHint" class="hint"></div>
         </div>
 
@@ -357,11 +357,36 @@
         const nonSelfHint = document.getElementById('nonSelfHint');
         const nonSelfSubHint = document.getElementById('nonSelfSubHint');
 
+        // 儲存上一次的欄位值，用於檢測是否真的改變
+        let previousType = typeSelect.value;
+        let previousResidentialUsage = residentialUsage.value;
+        let previousNonSelfUsage = nonSelfUsage.value;
+        let previousNonSelfSubUsage = nonSelfSubUsage.value;
+
         function updateForm() {
             const type = typeSelect.value;
             const resUsage = residentialUsage.value;
             const nonSelfType = nonSelfUsage.value;
-            const households = parseInt(householdsInput.value) || 1;
+            const nonSelfSubType = nonSelfSubUsage.value;
+            let households = parseInt(householdsInput.value) || 0;
+
+            // 檢查是否有欄位值改變
+            const hasTypeChanged = type !== previousType;
+            const hasResidentialUsageChanged = resUsage !== previousResidentialUsage;
+            const hasNonSelfUsageChanged = nonSelfType !== previousNonSelfUsage;
+            const hasNonSelfSubUsageChanged = nonSelfSubType !== previousNonSelfSubUsage;
+
+            // 如果任何欄位改變，重設持有戶數為 0
+            if (hasTypeChanged || hasResidentialUsageChanged || hasNonSelfUsageChanged || hasNonSelfSubUsageChanged) {
+                householdsInput.value = 0;
+                households = 0; // 更新 households 變數
+            }
+
+            // 更新上一次的欄位值
+            previousType = type;
+            previousResidentialUsage = resUsage;
+            previousNonSelfUsage = nonSelfType;
+            previousNonSelfSubUsage = nonSelfSubType;
 
             residentialGroup.classList.remove('active');
             nonSelfGroup.classList.remove('active');
@@ -417,12 +442,14 @@
                     householdsHint.textContent = '自住用全國持有戶數上限為 3 戶';
                     if (households > 3) {
                         householdsInput.value = 3; // 強制設為上限
+                        households = 3;
                     }
                 } else if (resUsage === 'single_self') {
                     householdsGroup.classList.add('active');
                     householdsInput.value = 1;
                     householdsInput.disabled = true;
                     householdsHint.textContent = '全國僅限 1 戶';
+                    households = 1;
                 } else if (resUsage === 'non_self') {
                     nonSelfGroup.classList.add('active');
                     nonSelfLabel.textContent = '非自住類型';
