@@ -271,17 +271,17 @@
                 <option value="social_rent_package">公益出租人及包租代管房屋稅優惠 - 社會住宅包租代管房屋</option>
                 <option value="personal_rent">公益出租人及包租代管房屋稅優惠 - 個人租賃住宅包租代管房屋</option>
                 <option value="public_housing">公有房屋</option>
-                <option value="worker_dorm">勞工宿舍及其附設員工餐廳（需勞工主管機關證明）</option>
-                <option value="shared_part">區分所有建築物共有部分（領有單獨建物所有權狀）</option>
+                <option value="worker_dorm">經勞工主管機關核發證明文件之勞工宿舍及其附設員工餐廳</option>
+                <option value="shared_part">依建物所有權狀或使用執照登載，屬區分所有建築物專有部分以外共有部分，並領有單獨建物所有權狀</option>
                 <option value="parking_space">專供停放車輛使用之停車空間</option>
                 <option value="co_owned">公同共有房屋</option>
-                <option value="care_facility">長期照顧服務機構及老人福利機構住宿房屋</option>
-                <option value="cultural_asset">文化資產保存法登錄之聚落建築群、史蹟及文化景觀</option>
-                <option value="public_construction">民間參與公共建設案之公共建設或附屬事業</option>
-                <option value="damaged_house">焚燬、坍塌、拆除至不堪居住程度之房屋</option>
-                <option value="disaster_relief">災區受災居民居住使用之房屋（財政部核定）</option>
-                <option value="industrial_park">產業園區住宅（依規定出租使用）</option>
-                <option value="leasing_management">法人住宅委託租賃住宅代管業或包租業轉租</option>
+                <option value="care_facility">經目的事業主管機關依長期照顧服務法及老人福利法規定許可之長期照顧服務機構及老人福利機構，提供其服務對象住宿之房屋</option>
+                <option value="cultural_asset">經直轄市、縣（市）政府依文化資產保存法登錄公告供住家使用之聚落建築群、史蹟及文化景觀</option>
+                <option value="public_construction">屬促進民間參與公共建設法第8條第1項第1款規定民間參與公共建設案之公共建設、附屬設施或附屬事業，其供住家用之房屋</option>
+                <option value="damaged_house">於課稅所屬期間之上一年7月1日至當年2月末日焚燬、坍塌、拆除至不堪居住程度之房屋</option>
+                <option value="disaster_relief">其他經財政部核定之房屋-所得稅法第11條第4項規定之機關團體所興建且無償供行政院公告之災區受災居民居住使用之房屋</option>
+                <option value="industrial_park">其他經財政部核定之房屋-符合產業園區土地建築物與設施使用收益及處分辦法第46條規定住宅，且依同辦法所定方式供出租使用</option>
+                <option value="leasing_management">其他經財政部核定之房屋-法人住宅所有權人委託租賃住宅市場發展及管理條例規定之租賃住宅代管業或出租予同條例規定之租賃住宅包租業轉租，且契約約定供居住使用1年以上之住宅</option>
             </select>
             <div id="nonSelfHint" class="hint"></div>
         </div>
@@ -380,7 +380,7 @@
             ];
 
             // 動態生成「類別」欄位的選項
-            const currentValue = nonSelfSubUsage.value; // 儲存當前選擇的值
+            const currentSubValue = nonSelfSubUsage.value; // 儲存當前選擇的值
             nonSelfSubUsage.innerHTML = ''; // 清空現有選項
             // 添加基本選項
             const standardRentOption = document.createElement('option');
@@ -402,8 +402,8 @@
             }
 
             // 恢復之前選擇的值（如果該值仍然有效）
-            if (Array.from(nonSelfSubUsage.options).some(option => option.value === currentValue)) {
-                nonSelfSubUsage.value = currentValue;
+            if (Array.from(nonSelfSubUsage.options).some(option => option.value === currentSubValue)) {
+                nonSelfSubUsage.value = currentSubValue;
             } else {
                 nonSelfSubUsage.value = 'standard_rent'; // 預設選擇第一個選項
             }
@@ -414,7 +414,7 @@
                     householdsGroup.classList.add('active');
                     householdsInput.disabled = false;
                     householdsInput.max = '3';
-                    householdsHint.textContent = '自住用持有戶數上限為 3 戶';
+                    householdsHint.textContent = '自住用全國持有戶數上限為 3 戶';
                     if (households > 3) {
                         householdsInput.value = 3; // 強制設為上限
                     }
@@ -487,6 +487,12 @@
                 'industrial_park', 'leasing_management'
             ];
 
+            const typesWithSpecialNote = [
+                'public_housing', 'worker_dorm', 'shared_part', 'parking_space', 'co_owned',
+                'care_facility', 'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
+                'industrial_park', 'leasing_management'
+            ];
+
             if (type === 'residential') {
                 if (resUsage === 'single_self') {
                     taxRateSelf = 1.0;
@@ -497,10 +503,10 @@
                     warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
                 } else if (resUsage === 'self') {
                     taxRateSelf = 1.2;
+                    effectiveTaxRateSelf = taxRateSelf; // 無折減
                     selfHouseholds = households;
                     warnings.push('除原有自住要件外，應於每年3月22日前有本人、配偶或直系親屬辦竣戶籍登記。');
-                    warnings.push('自住用持有戶數上限為 3 戶。');
-                    warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
+                    warnings.push('自住用全國持有戶數上限為 3 戶。');
                 } else if (resUsage === 'non_self') {
                     if (!nonCountedTypes.includes(nonSelfType)) {
                         nonSelfHouseholds = households;
@@ -540,6 +546,7 @@
                     } else if (nonSelfType === 'personal_rent') {
                         taxRateNonSelf = nonSelfSubType === 'standard_rent' ? 1.5 : 2.0;
                         effectiveTaxRateNonSelf = taxRateNonSelf * 0.6;
+                        warnings.push('減徵稅額40%，每屋上限1萬元；租金收入須申報租賃所得。');
                     } else if (nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
                         if (nonSelfType === 'co_owned') {
                             taxRateNonSelf = (nonSelfSubType === 'standard_rent' || nonSelfSubType === 'inherited_co_owned') ? 1.5 : 2.0;
@@ -558,6 +565,12 @@
                 nonSelfHouseholds = 0;
             }
 
+            // 四捨五入稅率，解決浮點數精度問題
+            effectiveTaxRateSelf = parseFloat(effectiveTaxRateSelf.toFixed(1));
+            taxRateSelf = parseFloat(taxRateSelf.toFixed(1));
+            effectiveTaxRateNonSelf = parseFloat(effectiveTaxRateNonSelf.toFixed(1));
+            taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
+
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
@@ -565,16 +578,16 @@
                 <p>房屋使用情形：${type === 'residential' ? '住家用' : '非住家用'}</p>
                 ${type === 'residential' && resUsage === 'self' ? `
                     <p>住家用途：自住用</p>
-                    <p>自住用持有戶數：${selfHouseholds} 戶，適用稅率：<strong>${taxRateSelf}%</strong></p>
+                    <p>自住用持有戶數：${selfHouseholds} 戶，適用稅率：<strong>${effectiveTaxRateSelf}%</strong></p>
                 ` : type === 'residential' && resUsage === 'single_self' ? `
                     <p>住家用途：全國單一自住（現值低於2,842,000元）</p>
-                    <p>自住用持有戶數：${selfHouseholds} 戶，適用稅率：<strong>${effectiveTaxRateSelf}%</strong> ${effectiveTaxRateSelf !== taxRateSelf ? `(法定稅率 ${taxRateSelf}%)` : ''}</p>
+                    <p>自住用持有戶數：${selfHouseholds} 戶，適用稅率：<strong>${effectiveTaxRateSelf}%</strong> ${effectiveTaxRateSelf !== taxRateSelf ? `（法定稅率${taxRateSelf}%）` : ''}</p>
                 ` : type === 'residential' && resUsage === 'non_self' ? `
                     <p>住家用途：非自住</p>
                     <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
                     ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>類別：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
                     ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住持有戶數：${nonSelfHouseholds} 戶</p>` : ''}
-                    <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateSelf ? `(法定稅率 ${taxRateNonSelf}%)` : ''}</p>
+                    <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf ? `（法定稅率${taxRateNonSelf}%）` : ''}</p>
                 ` : `
                     <p>非住家用途：${document.getElementById('nonResidentialUsage').options[document.getElementById('nonResidentialUsage').selectedIndex].text}</p>
                     <p>適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong></p>
