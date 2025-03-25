@@ -266,7 +266,7 @@
                 <option value="rent_standard">出租申報租賃所得達租金標準（臺北市112年度租金標準為房屋現值27%）</option>
                 <option value="inherited_shared">繼承取得分別共有房屋（繼承取得單獨持有房屋不在此限）</option>
                 <option value="developer">起造人持有待銷售房屋</option>
-                <option value="other_residential">其他住家用房屋（如空置、租賃所得未申報或未達租金標準等）</option>
+                <option value="other_residential">其他住家用房屋（含空置房屋、地下租賃房屋等）</option>
                 <option value="social_rent_public">公益出租人及包租代管房屋稅優惠 - 公益出租人</option>
                 <option value="social_rent_package">公益出租人及包租代管房屋稅優惠 - 社會住宅包租代管房屋</option>
                 <option value="personal_rent">公益出租人及包租代管房屋稅優惠 - 個人租賃住宅包租代管房屋</option>
@@ -314,7 +314,13 @@
 
         <div class="form-group" id="yearsGroup">
             <label>持有年數（年）</label>
-            <input type="number" id="years" min="0" value="0">
+            <select id="years">
+                <option value="within_1">1年以內</option>
+                <option value="1_to_2">1~2年</option>
+                <option value="2_to_4">2~4年</option>
+                <option value="4_to_5">4~5年</option>
+                <option value="over_5">超過5年</option>
+            </select>
         </div>
 
         <button onclick="calculateTax()">計算稅率</button>
@@ -356,6 +362,7 @@
         const householdsHint = document.getElementById('householdsHint');
         const nonSelfHint = document.getElementById('nonSelfHint');
         const nonSelfSubHint = document.getElementById('nonSelfSubHint');
+        const yearsSelect = document.getElementById('years');
 
         // 儲存上一次的欄位值，用於檢測是否真的改變
         let previousType = typeSelect.value;
@@ -488,6 +495,7 @@
         nonSelfUsage.addEventListener('change', updateForm);
         nonSelfSubUsage.addEventListener('change', updateForm);
         householdsInput.addEventListener('input', updateForm);
+        yearsSelect.addEventListener('change', updateForm);
         updateForm();
 
         function calculateTax() {
@@ -497,7 +505,7 @@
             const nonSelfSubType = nonSelfSubUsage.value;
             const nonResUsage = document.getElementById('nonResidentialUsage').value;
             let households = parseInt(document.getElementById('households').value);
-            const years = parseInt(document.getElementById('years').value);
+            const years = document.getElementById('years').value;
             let taxRateSelf = 0;
             let effectiveTaxRateSelf = 0;
             let taxRateNonSelf = 0;
@@ -549,11 +557,11 @@
                         else taxRateNonSelf = 2.4;
                         effectiveTaxRateNonSelf = taxRateNonSelf;
                     } else if (nonSelfType === 'developer') {
-                        if (years <= 1) taxRateNonSelf = 2.0;
-                        else if (years <= 2) taxRateNonSelf = 2.4;
-                        else if (years <= 4) taxRateNonSelf = 3.6;
-                        else if (years <= 5) taxRateNonSelf = 4.2;
-                        else taxRateNonSelf = 4.8;
+                        if (years === 'within_1') taxRateNonSelf = 2.0;
+                        else if (years === '1_to_2') taxRateNonSelf = 2.4;
+                        else if (years === '2_to_4') taxRateNonSelf = 3.6;
+                        else if (years === '4_to_5') taxRateNonSelf = 4.2;
+                        else if (years === 'over_5') taxRateNonSelf = 4.8;
                         effectiveTaxRateNonSelf = taxRateNonSelf;
                         warnings.push('起造人持有待銷售房屋，按持有年數訂定差別稅率');
                     } else if (nonSelfType === 'other_residential') {
@@ -567,9 +575,10 @@
                         effectiveTaxRateNonSelf = 0.75;
                         warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
                     } else if (nonSelfType === 'social_rent_package') {
-                        taxRateNonSelf = 1.2;
-                        effectiveTaxRateNonSelf = 0.75;
-                        warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。臺北市社會住宅興辦及公益出租人出租房屋減免地價稅及房屋稅自治條例刻修法中，依臺北市政府113年9月5日預告修正該自治條例修正草案，擬將本市社會住宅包租代管房屋稅減徵比例，由減徵稅額20%，調整為適用減徵之特定稅率即1.2%。');
+                        taxRateNonSelf = 0; // 不計算稅率
+                        effectiveTaxRateNonSelf = 0; // 不計算稅率
+                        warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
+                        warnings.push('臺北市社會住宅興辦及公益出租人出租房屋減免地價稅及房屋稅自治條例刻修法中，依臺北市政府113年9月5日預告修正該自治條例修正草案，擬將本市社會住宅包租代管房屋稅減徵比例，由減徵稅額20%，調整為適用減徵之特定稅率即1.2%。');
                     } else if (nonSelfType === 'personal_rent') {
                         taxRateNonSelf = nonSelfSubType === 'standard_rent' ? 1.5 : 2.0;
                         effectiveTaxRateNonSelf = taxRateNonSelf * 0.6;
@@ -592,11 +601,21 @@
                 nonSelfHouseholds = 0;
             }
 
-            // 四捨五入稅率，解決浮點數精度問題
+            // 處理稅率格式
             effectiveTaxRateSelf = parseFloat(effectiveTaxRateSelf.toFixed(1));
             taxRateSelf = parseFloat(taxRateSelf.toFixed(1));
-            effectiveTaxRateNonSelf = parseFloat(effectiveTaxRateNonSelf.toFixed(1));
-            taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
+            if (nonSelfType === 'social_rent_public') {
+                // 公益出租人稅率無條件捨去至小數第二位
+                effectiveTaxRateNonSelf = Math.floor(effectiveTaxRateNonSelf * 100) / 100;
+                taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
+            } else if (nonSelfType === 'social_rent_package') {
+                // 社會住宅包租代管房屋稅率顯示為「修法中」
+                effectiveTaxRateNonSelf = '修法中';
+                taxRateNonSelf = '修法中';
+            } else {
+                effectiveTaxRateNonSelf = parseFloat(effectiveTaxRateNonSelf.toFixed(1));
+                taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
+            }
 
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
@@ -614,19 +633,17 @@
                     <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
                     ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>類別：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
                     ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住持有戶數：${nonSelfHouseholds} 戶</p>` : ''}
-                    <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf ? `（法定稅率${taxRateNonSelf}%）` : ''}</p>
+                    <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf === '修法中' ? '修法中' : effectiveTaxRateNonSelf + '%'}</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf && effectiveTaxRateNonSelf !== '修法中' ? `（法定稅率${taxRateNonSelf}%）` : ''}</p>
                 ` : `
                     <p>非住家用途：${document.getElementById('nonResidentialUsage').options[document.getElementById('nonResidentialUsage').selectedIndex].text}</p>
                     <p>適用稅率：<strong>${effectiveTaxRateNonSelf}%</strong></p>
                 `}
-                ${(nonSelfType === 'developer') ? `<p>持有年數：${years} 年</p>` : ''}
+                ${(nonSelfType === 'developer') ? `<p>持有年數：${document.getElementById('years').options[document.getElementById('years').selectedIndex].text}</p>` : ''}
                 ${warnings.length > 0 ? `
                     <p class="warning">
-                        ${warnings.length > 1 ? `
-                            <ul>
-                                ${warnings.map(w => `<li>${w}</li>`).join('')}
-                            </ul>
-                        ` : warnings[0]}
+                        <ul>
+                            ${warnings.map(w => `<li>${w}</li>`).join('')}
+                        </ul>
                     </p>
                 ` : ''}
             `;
