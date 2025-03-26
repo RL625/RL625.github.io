@@ -308,7 +308,7 @@
 
         <div class="form-group" id="householdsGroup">
             <label>持有戶數</label>
-            <input type="number" id="households" min="1" max="3" value="0">
+            <input type="number" id="households" min="1" max="3" value="1">
             <div id="householdsHint" class="hint"></div>
         </div>
 
@@ -375,7 +375,7 @@
             const resUsage = residentialUsage.value;
             const nonSelfType = nonSelfUsage.value;
             const nonSelfSubType = nonSelfSubUsage.value;
-            let households = parseInt(householdsInput.value) || 0;
+            let households = parseInt(householdsInput.value) || 1;
 
             // 檢查是否有欄位值改變
             const hasTypeChanged = type !== previousType;
@@ -383,10 +383,10 @@
             const hasNonSelfUsageChanged = nonSelfType !== previousNonSelfUsage;
             const hasNonSelfSubUsageChanged = nonSelfSubType !== previousNonSelfSubUsage;
 
-            // 如果任何欄位改變，重設持有戶數為 0
+            // 如果任何欄位改變，重設持有戶數為 1
             if (hasTypeChanged || hasResidentialUsageChanged || hasNonSelfUsageChanged || hasNonSelfSubUsageChanged) {
-                householdsInput.value = 0;
-                households = 0; // 更新 households 變數
+                householdsInput.value = 1;
+                households = 1; // 更新 households 變數
             }
 
             // 更新上一次的欄位值
@@ -403,6 +403,7 @@
             yearsGroup.classList.remove('active');
             householdsHint.textContent = '';
             nonSelfHint.textContent = '';
+            nonSelfSubHint.textContent = '';
 
             const nonCountedTypes = [
                 'social_rent_public', 'social_rent_package', 'personal_rent', 'public_housing',
@@ -480,7 +481,11 @@
                     }
                     if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
                         nonSelfSubGroup.classList.add('active');
-                        nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。';
+                        if (nonSelfType === 'co_owned' && nonSelfSubType === 'inherited_co_owned') {
+                            nonSelfSubHint.textContent = ''; // 移除提示
+                        } else {
+                            nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。';
+                        }
                     } else {
                         nonSelfSubGroup.classList.remove('active');
                     }
