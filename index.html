@@ -293,7 +293,7 @@
                 <option value="below_standard">未申報租賃所得或申報租金未達標準等其他住家用房屋</option>
             </select>
             <div id="nonSelfSubHint" class="hint">
-                臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。
+                臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。
             </div>
         </div>
 
@@ -480,7 +480,7 @@
                     }
                     if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
                         nonSelfSubGroup.classList.add('active');
-                        nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元，高於81,000元則適用1.5%，低於81,000元則適用2%。';
+                        nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。';
                     } else {
                         nonSelfSubGroup.classList.remove('active');
                     }
