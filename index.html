@@ -13,7 +13,6 @@
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
         body {
             background-color: #f5f5f7;
             display: flex;
@@ -22,7 +21,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             background: #ffffff;
             width: 100%;
@@ -31,7 +29,6 @@
             border-radius: 18px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
-
         h1 {
             font-family: 'SF Pro Display', sans-serif;
             font-size: 32px;
@@ -40,14 +37,12 @@
             text-align: center;
             margin-bottom: 8px;
         }
-
         p.subtitle {
             font-size: 16px;
             color: #6e6e73;
             text-align: center;
             margin-bottom: 30px;
         }
-
         .form-group {
             margin-bottom: 20px;
             display: none;
@@ -55,13 +50,11 @@
             transform: translateY(10px);
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
-
         .form-group.active {
             display: block;
             opacity: 1;
             transform: translateY(0);
         }
-
         label {
             display: block;
             font-size: 14px;
@@ -69,7 +62,6 @@
             margin-bottom: 8px;
             font-weight: 500;
         }
-
         select, input {
             width: 100%;
             padding: 12px;
@@ -79,19 +71,22 @@
             background: #f5f5f7;
             color: #1d1d1f;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
+            position: relative;
+            z-index: 10; /* 提高 z-index */
         }
-
         select:focus, input:focus {
             outline: none;
             border-color: #007aff;
             box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
         }
-
         input[disabled] {
             background: #e8e8ed;
             color: #86868b;
         }
-
         button {
             width: 100%;
             padding: 14px;
@@ -104,15 +99,12 @@
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.1s ease;
         }
-
         button:hover {
             background: #0066cc;
         }
-
         button:active {
             transform: scale(0.98);
         }
-
         #result {
             margin-top: 25px;
             padding: 20px;
@@ -121,7 +113,6 @@
             display: none;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-
         #result h3 {
             font-family: 'SF Pro Display', sans-serif;
             font-size: 18px;
@@ -129,39 +120,32 @@
             color: #1d1d1f;
             margin-bottom: 12px;
         }
-
         #result p {
             font-size: 15px;
             color: #1d1d1f;
             margin: 6px 0;
         }
-
         #result strong {
             color: #ff3b30;
             font-weight: 500;
         }
-
         .warning {
             color: #ff3b30;
             font-size: 13px;
             margin-top: 10px;
         }
-
         .warning ul {
             padding-left: 15px;
             margin: 5px 0;
         }
-
         .warning li {
             margin: 3px 0;
         }
-
         .hint {
             color: #ff3b30;
             font-size: 13px;
             margin-top: 5px;
         }
-
         .links-section {
             margin-top: 25px;
             padding: 20px;
@@ -169,7 +153,6 @@
             border-radius: 10px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-
         .links-section h3 {
             font-family: 'SF Pro Display', sans-serif;
             font-size: 16px;
@@ -178,13 +161,11 @@
             margin-bottom: 15px;
             text-align: center;
         }
-
         .links-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
         .links-section .link-button {
             display: inline-flex;
             align-items: center;
@@ -196,42 +177,33 @@
             transition: color 0.3s ease;
             justify-content: center;
         }
-
         .links-section .link-button:hover {
             color: #0066cc;
         }
-
         .links-section .download-button {
             color: #007aff;
         }
-
         .links-section .download-button:hover {
             color: #0066cc;
         }
-
         .links-section .link-button .icon {
             margin-right: 8px;
             font-size: 16px;
             transition: transform 0.3s ease;
         }
-
         .links-section .link-button:hover .icon {
             transform: translateX(3px);
         }
-
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
             }
-
             h1 {
                 font-size: 28px;
             }
-
             p.subtitle {
                 font-size: 14px;
             }
-
             button {
                 font-size: 16px;
             }
@@ -242,7 +214,6 @@
     <div class="container">
         <h1>臺北市房屋稅率試算器</h1>
         <p class="subtitle">適用於自113年7月1日起</p>
-
         <div class="form-group active" id="typeGroup">
             <label>房屋使用情形</label>
             <select id="type">
@@ -250,7 +221,6 @@
                 <option value="non_residential">非住家用</option>
             </select>
         </div>
-
         <div class="form-group" id="residentialGroup">
             <label>住家用途</label>
             <select id="residentialUsage">
@@ -259,7 +229,6 @@
                 <option value="non_self">非自住</option>
             </select>
         </div>
-
         <div class="form-group" id="nonSelfGroup">
             <label id="nonSelfLabel">非自住類型</label>
             <select id="nonSelfUsage">
@@ -285,7 +254,6 @@
             </select>
             <div id="nonSelfHint" class="hint"></div>
         </div>
-
         <div class="form-group" id="nonSelfSubGroup">
             <label>類別</label>
             <select id="nonSelfSubUsage">
@@ -296,7 +264,6 @@
                 臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。
             </div>
         </div>
-
         <div class="form-group" id="nonResidentialGroup">
             <label>非住家用途</label>
             <select id="nonResidentialUsage">
@@ -305,13 +272,23 @@
                 <option value="non_profit">供人民團體等非營業使用</option>
             </select>
         </div>
-
         <div class="form-group" id="householdsGroup">
             <label>持有戶數</label>
-            <input type="number" id="households" min="1" max="3" value="1">
+            <div id="householdsContainer">
+                <input type="number" id="householdsInput" min="1" max="3" value="1">
+                <select id="householdsSelect" style="display: none;">
+                    <!-- 靜態定義所有選項 -->
+                    <option value="non_self_within_4" class="rent-standard-option">全國4戶以內</option>
+                    <option value="non_self_5_to_6" class="rent-standard-option">全國5~6戶</option>
+                    <option value="non_self_over_7" class="rent-standard-option">全國7戶以上</option>
+                    <option value="non_self_within_2" class="other-residential-option">全國2戶以內</option>
+                    <option value="non_self_3_to_4" class="other-residential-option">全國3~4戶</option>
+                    <option value="non_self_5_to_6_other" class="other-residential-option">全國5~6戶</option>
+                    <option value="non_self_over_7_other" class="other-residential-option">全國7戶以上</option>
+                </select>
+            </div>
             <div id="householdsHint" class="hint"></div>
         </div>
-
         <div class="form-group" id="yearsGroup">
             <label>持有年數（年）</label>
             <select id="years">
@@ -322,11 +299,8 @@
                 <option value="over_5">超過5年</option>
             </select>
         </div>
-
         <button onclick="calculateTax()">計算稅率</button>
-
         <div id="result"></div>
-
         <div class="links-section">
             <h3>申辦連結</h3>
             <div class="links-container">
@@ -345,7 +319,6 @@
             </div>
         </div>
     </div>
-
     <script>
         const typeSelect = document.getElementById('type');
         const residentialGroup = document.getElementById('residentialGroup');
@@ -358,43 +331,50 @@
         const nonSelfLabel = document.getElementById('nonSelfLabel');
         const householdsGroup = document.getElementById('householdsGroup');
         const yearsGroup = document.getElementById('yearsGroup');
-        const householdsInput = document.getElementById('households');
+        const householdsInput = document.getElementById('householdsInput');
+        const householdsSelect = document.getElementById('householdsSelect');
+        const householdsContainer = document.getElementById('householdsContainer');
         const householdsHint = document.getElementById('householdsHint');
         const nonSelfHint = document.getElementById('nonSelfHint');
         const nonSelfSubHint = document.getElementById('nonSelfSubHint');
         const yearsSelect = document.getElementById('years');
-
         // 儲存上一次的欄位值，用於檢測是否真的改變
         let previousType = typeSelect.value;
         let previousResidentialUsage = residentialUsage.value;
         let previousNonSelfUsage = nonSelfUsage.value;
         let previousNonSelfSubUsage = nonSelfSubUsage.value;
-
         function updateForm() {
             const type = typeSelect.value;
             const resUsage = residentialUsage.value;
             const nonSelfType = nonSelfUsage.value;
             const nonSelfSubType = nonSelfSubUsage.value;
             let households = parseInt(householdsInput.value) || 1;
-
+            console.log('updateForm called:', { type, resUsage, nonSelfType, nonSelfSubType, households });
             // 檢查是否有欄位值改變
             const hasTypeChanged = type !== previousType;
             const hasResidentialUsageChanged = resUsage !== previousResidentialUsage;
             const hasNonSelfUsageChanged = nonSelfType !== previousNonSelfUsage;
             const hasNonSelfSubUsageChanged = nonSelfSubType !== previousNonSelfSubUsage;
-
-            // 如果任何欄位改變，重設持有戶數為 1
+            // 如果任何欄位改變，重設持有戶數為預設值
             if (hasTypeChanged || hasResidentialUsageChanged || hasNonSelfUsageChanged || hasNonSelfSubUsageChanged) {
-                householdsInput.value = 1;
-                households = 1; // 更新 households 變數
+                if (resUsage === 'non_self' && nonSelfType === 'other_residential') {
+                    householdsSelect.value = 'non_self_within_2';
+                    console.log('Reset householdsSelect to non_self_within_2');
+                } else if (resUsage === 'non_self' && (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared')) {
+                    householdsSelect.value = 'non_self_within_4';
+                    console.log('Reset householdsSelect to non_self_within_4');
+                } else {
+                    householdsInput.value = 1;
+                    households = 1;
+                    console.log('Reset householdsInput to 1');
+                }
             }
-
             // 更新上一次的欄位值
             previousType = type;
             previousResidentialUsage = resUsage;
             previousNonSelfUsage = nonSelfType;
             previousNonSelfSubUsage = nonSelfSubType;
-
+            // 移除所有欄位的 active 類別
             residentialGroup.classList.remove('active');
             nonSelfGroup.classList.remove('active');
             nonSelfSubGroup.classList.remove('active');
@@ -404,85 +384,151 @@
             householdsHint.textContent = '';
             nonSelfHint.textContent = '';
             nonSelfSubHint.textContent = '';
-
             const nonCountedTypes = [
                 'social_rent_public', 'social_rent_package', 'personal_rent', 'public_housing',
                 'worker_dorm', 'shared_part', 'parking_space', 'co_owned', 'care_facility',
                 'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
                 'industrial_park', 'leasing_management'
             ];
-
             // 動態生成「類別」欄位的選項
-            const currentSubValue = nonSelfSubUsage.value; // 儲存當前選擇的值
-            nonSelfSubUsage.innerHTML = ''; // 清空現有選項
-            // 添加基本選項
+            const currentSubValue = nonSelfSubUsage.value;
+            nonSelfSubUsage.innerHTML = '';
             const standardRentOption = document.createElement('option');
             standardRentOption.value = 'standard_rent';
             standardRentOption.textContent = '出租申報租賃所得且達租金標準';
             nonSelfSubUsage.appendChild(standardRentOption);
-
             const belowStandardOption = document.createElement('option');
             belowStandardOption.value = 'below_standard';
             belowStandardOption.textContent = '未申報租賃所得或申報租金未達標準等其他住家用房屋';
             nonSelfSubUsage.appendChild(belowStandardOption);
-
-            // 如果是「公同共有房屋」，添加「繼承取得公同共有房屋」選項
             if (nonSelfType === 'co_owned') {
                 const inheritedCoOwnedOption = document.createElement('option');
                 inheritedCoOwnedOption.value = 'inherited_co_owned';
                 inheritedCoOwnedOption.textContent = '繼承取得公同共有房屋';
                 nonSelfSubUsage.appendChild(inheritedCoOwnedOption);
             }
-
-            // 恢復之前選擇的值（如果該值仍然有效）
             if (Array.from(nonSelfSubUsage.options).some(option => option.value === currentSubValue)) {
                 nonSelfSubUsage.value = currentSubValue;
             } else {
-                nonSelfSubUsage.value = 'standard_rent'; // 預設選擇第一個選項
+                nonSelfSubUsage.value = 'standard_rent';
             }
-
+            // 動態切換「持有戶數」欄位的顯示方式
+            if (resUsage === 'non_self' && (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared')) {
+                householdsInput.style.display = 'none';
+                // 隱藏其他選項，僅顯示 rent-standard-option
+                const options = householdsSelect.querySelectorAll('option');
+                options.forEach(opt => {
+                    if (opt.classList.contains('rent-standard-option')) {
+                        opt.style.display = 'block';
+                    } else {
+                        opt.style.display = 'none';
+                    }
+                });
+                if (!householdsSelect.value || !Array.from(householdsSelect.options).some(opt => opt.value === householdsSelect.value && opt.style.display !== 'none')) {
+                    householdsSelect.value = 'non_self_within_4';
+                }
+                setTimeout(() => {
+                    householdsSelect.style.display = 'block';
+                    householdsSelect.style.opacity = '1';
+                    householdsSelect.style.pointerEvents = 'auto';
+                    // 強制重新渲染
+                    householdsSelect.offsetHeight;
+                    console.log('Showing householdsSelect for rent_standard/inherited_shared:', householdsSelect.value);
+                }, 0);
+            } else if (resUsage === 'non_self' && nonSelfType === 'other_residential') {
+                householdsInput.style.display = 'none';
+                // 隱藏其他選項，僅顯示 other-residential-option
+                const options = householdsSelect.querySelectorAll('option');
+                options.forEach(opt => {
+                    if (opt.classList.contains('other-residential-option')) {
+                        opt.style.display = 'block';
+                    } else {
+                        opt.style.display = 'none';
+                    }
+                });
+                if (!householdsSelect.value || !Array.from(householdsSelect.options).some(opt => opt.value === householdsSelect.value && opt.style.display !== 'none')) {
+                    householdsSelect.value = 'non_self_within_2';
+                }
+                setTimeout(() => {
+                    householdsSelect.style.display = 'block';
+                    householdsSelect.style.opacity = '1';
+                    householdsSelect.style.pointerEvents = 'auto';
+                    // 強制重新渲染
+                    householdsSelect.offsetHeight;
+                    console.log('Showing householdsSelect for other_residential:', householdsSelect.value);
+                }, 0);
+            } else {
+                householdsSelect.style.display = 'none';
+                householdsInput.style.display = 'block';
+                console.log('Showing householdsInput');
+            }
+            // 根據選擇顯示欄位
             if (type === 'residential') {
-                residentialGroup.classList.add('active');
+                setTimeout(() => {
+                    residentialGroup.classList.add('active');
+                    console.log('Showing residentialGroup');
+                }, 0);
                 if (resUsage === 'self') {
-                    householdsGroup.classList.add('active');
+                    setTimeout(() => {
+                        householdsGroup.classList.add('active');
+                        console.log('Showing householdsGroup for self');
+                    }, 0);
                     householdsInput.disabled = false;
                     householdsInput.max = '3';
                     householdsHint.textContent = '自住用全國持有戶數上限為 3 戶';
                     if (households > 3) {
-                        householdsInput.value = 3; // 強制設為上限
+                        householdsInput.value = 3;
                         households = 3;
                     }
                 } else if (resUsage === 'single_self') {
-                    householdsGroup.classList.add('active');
+                    setTimeout(() => {
+                        householdsGroup.classList.add('active');
+                        console.log('Showing householdsGroup for single_self');
+                    }, 0);
                     householdsInput.value = 1;
                     householdsInput.disabled = true;
                     householdsHint.textContent = '全國僅限 1 戶';
                     households = 1;
                 } else if (resUsage === 'non_self') {
-                    nonSelfGroup.classList.add('active');
+                    setTimeout(() => {
+                        nonSelfGroup.classList.add('active');
+                        console.log('Showing nonSelfGroup');
+                    }, 0);
                     nonSelfLabel.textContent = '非自住類型';
+                    if (nonSelfType === 'rent_standard') {
+                        nonSelfHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。';
+                    } else if (nonCountedTypes.includes(nonSelfType)) {
+                        nonSelfHint.textContent = '不計入全國歸戶';
+                    } else if (nonSelfType === 'social_rent_package') {
+                        nonSelfHint.textContent = '修法中';
+                    } else {
+                        nonSelfHint.textContent = '';
+                    }
                     if (nonSelfType === 'developer') {
-                        yearsGroup.classList.add('active');
+                        setTimeout(() => {
+                            yearsGroup.classList.add('active');
+                            console.log('Showing yearsGroup');
+                        }, 0);
                         householdsGroup.classList.remove('active');
                     } else if (nonCountedTypes.includes(nonSelfType)) {
                         householdsGroup.classList.remove('active');
                         yearsGroup.classList.remove('active');
                     } else {
                         yearsGroup.classList.remove('active');
-                        householdsGroup.classList.add('active');
+                        setTimeout(() => {
+                            householdsGroup.classList.add('active');
+                            console.log('Showing householdsGroup for non_self');
+                        }, 0);
                         householdsInput.disabled = false;
-                        householdsInput.max = ''; // 非自住不設上限
-                    }
-                    if (nonCountedTypes.includes(nonSelfType)) {
-                        nonSelfHint.textContent = '不計入全國歸戶';
-                    }
-                    if (nonSelfType === 'social_rent_package') {
-                        nonSelfHint.textContent = '修法中';
+                        householdsInput.max = '';
                     }
                     if (nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') {
-                        nonSelfSubGroup.classList.add('active');
+                        setTimeout(() => {
+                            nonSelfSubGroup.classList.add('active');
+                            console.log('Showing nonSelfSubGroup');
+                        }, 0);
                         if (nonSelfType === 'co_owned' && nonSelfSubType === 'inherited_co_owned') {
-                            nonSelfSubHint.textContent = ''; // 移除提示
+                            nonSelfSubHint.textContent = '';
                         } else {
                             nonSelfSubHint.textContent = '臺北市112年度租金標準為房屋現值27%，例：房屋現值300,000元，每年租金標準為300,000元*27%=81,000元（即每月租金6,750元），高於81,000元則適用1.5%，低於81,000元則適用2%。';
                         }
@@ -491,26 +537,43 @@
                     }
                 }
             } else if (type === 'non_residential') {
-                nonResidentialGroup.classList.add('active');
+                setTimeout(() => {
+                    nonResidentialGroup.classList.add('active');
+                    console.log('Showing nonResidentialGroup');
+                }, 0);
             }
         }
-
+        // 確保 DOM 載入完成後執行 updateForm
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM fully loaded, calling updateForm');
+            updateForm();
+        });
         typeSelect.addEventListener('change', updateForm);
         residentialUsage.addEventListener('change', updateForm);
         nonSelfUsage.addEventListener('change', updateForm);
         nonSelfSubUsage.addEventListener('change', updateForm);
         householdsInput.addEventListener('input', updateForm);
+        householdsSelect.addEventListener('change', () => {
+            console.log('householdsSelect changed to:', householdsSelect.value);
+            updateForm();
+        });
+        // 添加觸控事件
+        householdsSelect.addEventListener('touchstart', () => {
+            console.log('Touch started on householdsSelect');
+        });
+        householdsSelect.addEventListener('touchend', () => {
+            console.log('Touch ended on householdsSelect, current value:', householdsSelect.value);
+        });
         yearsSelect.addEventListener('change', updateForm);
-        updateForm();
-
         function calculateTax() {
             const type = typeSelect.value;
             const resUsage = residentialUsage.value;
             const nonSelfType = nonSelfUsage.value;
             const nonSelfSubType = nonSelfSubUsage.value;
             const nonResUsage = document.getElementById('nonResidentialUsage').value;
-            let households = parseInt(document.getElementById('households').value);
+            const householdsSelectValue = document.getElementById('householdsSelect').value;
             const years = document.getElementById('years').value;
+            let households = parseInt(document.getElementById('householdsInput').value) || 1;
             let taxRateSelf = 0;
             let effectiveTaxRateSelf = 0;
             let taxRateNonSelf = 0;
@@ -518,21 +581,15 @@
             let warnings = [];
             let selfHouseholds = 0;
             let nonSelfHouseholds = 0;
-            let totalHouseholdsForNonSelf = households;
-
+            let totalHouseholdsForNonSelf = 0;
+            let displayHouseholds = '';
+            console.log('calculateTax called:', { type, resUsage, nonSelfType, nonSelfSubType, householdsSelectValue, households });
             const nonCountedTypes = [
                 'social_rent_public', 'social_rent_package', 'personal_rent', 'public_housing',
                 'worker_dorm', 'shared_part', 'parking_space', 'co_owned', 'care_facility',
                 'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
                 'industrial_park', 'leasing_management'
             ];
-
-            const typesWithSpecialNote = [
-                'public_housing', 'worker_dorm', 'shared_part', 'parking_space', 'co_owned',
-                'care_facility', 'cultural_asset', 'public_construction', 'damaged_house', 'disaster_relief',
-                'industrial_park', 'leasing_management'
-            ];
-
             if (type === 'residential') {
                 if (resUsage === 'single_self') {
                     taxRateSelf = 1.0;
@@ -543,24 +600,60 @@
                     warnings.push('自113年7月1日起，持有本市之全國單一自住房屋且房屋現值在一定金額以下者，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減30%、20%、10%(相當稅率0.7%、0.8%、0.9%)，自117年期起稅基不再折減(恢復法定稅率1.0%)。');
                 } else if (resUsage === 'self') {
                     taxRateSelf = 1.2;
-                    effectiveTaxRateSelf = taxRateSelf; // 無折減
+                    effectiveTaxRateSelf = taxRateSelf;
                     selfHouseholds = households;
                     warnings.push('除原有自住要件外，應於每年3月22日前有本人、配偶或直系親屬辦竣戶籍登記。');
                     warnings.push('自住用全國持有戶數上限為 3 戶。');
                 } else if (resUsage === 'non_self') {
                     if (!nonCountedTypes.includes(nonSelfType)) {
-                        nonSelfHouseholds = households;
-                        totalHouseholdsForNonSelf = households;
+                        if (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared') {
+                            if (householdsSelectValue === 'non_self_within_4') {
+                                nonSelfHouseholds = 4;
+                                totalHouseholdsForNonSelf = 4;
+                                displayHouseholds = '全國4戶以內';
+                            } else if (householdsSelectValue === 'non_self_5_to_6') {
+                                nonSelfHouseholds = 6;
+                                totalHouseholdsForNonSelf = 6;
+                                displayHouseholds = '全國5~6戶';
+                            } else if (householdsSelectValue === 'non_self_over_7') {
+                                nonSelfHouseholds = 7;
+                                totalHouseholdsForNonSelf = 7;
+                                displayHouseholds = '全國7戶以上';
+                            }
+                        } else if (nonSelfType === 'other_residential') {
+                            if (householdsSelectValue === 'non_self_within_2') {
+                                nonSelfHouseholds = 2;
+                                totalHouseholdsForNonSelf = 2;
+                                displayHouseholds = '全國2戶以內';
+                            } else if (householdsSelectValue === 'non_self_3_to_4') {
+                                nonSelfHouseholds = 4;
+                                totalHouseholdsForNonSelf = 4;
+                                displayHouseholds = '全國3~4戶';
+                            } else if (householdsSelectValue === 'non_self_5_to_6_other') {
+                                nonSelfHouseholds = 6;
+                                totalHouseholdsForNonSelf = 6;
+                                displayHouseholds = '全國5~6戶';
+                            } else if (householdsSelectValue === 'non_self_over_7_other') {
+                                nonSelfHouseholds = 7;
+                                totalHouseholdsForNonSelf = 7;
+                                displayHouseholds = '全國7戶以上';
+                            }
+                        } else {
+                            nonSelfHouseholds = households;
+                            totalHouseholdsForNonSelf = households;
+                            displayHouseholds = `${households} 戶`;
+                        }
                     } else {
                         nonSelfHouseholds = 0;
                         totalHouseholdsForNonSelf = 0;
+                        displayHouseholds = '';
                     }
-
                     if (nonSelfType === 'rent_standard' || nonSelfType === 'inherited_shared') {
-                        if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 1.5;
-                        else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 2.0;
-                        else taxRateNonSelf = 2.4;
+                        if (householdsSelectValue === 'non_self_within_4') taxRateNonSelf = 1.5;
+                        else if (householdsSelectValue === 'non_self_5_to_6') taxRateNonSelf = 2.0;
+                        else if (householdsSelectValue === 'non_self_over_7') taxRateNonSelf = 2.4;
                         effectiveTaxRateNonSelf = taxRateNonSelf;
+                        console.log('Tax rate for rent_standard/inherited_shared:', taxRateNonSelf);
                     } else if (nonSelfType === 'developer') {
                         if (years === 'within_1') taxRateNonSelf = 2.0;
                         else if (years === '1_to_2') taxRateNonSelf = 2.4;
@@ -570,18 +663,19 @@
                         effectiveTaxRateNonSelf = taxRateNonSelf;
                         warnings.push('起造人持有待銷售房屋，按持有年數訂定差別稅率');
                     } else if (nonSelfType === 'other_residential') {
-                        if (totalHouseholdsForNonSelf <= 2) taxRateNonSelf = 3.2;
-                        else if (totalHouseholdsForNonSelf <= 4) taxRateNonSelf = 3.8;
-                        else if (totalHouseholdsForNonSelf <= 6) taxRateNonSelf = 4.2;
-                        else taxRateNonSelf = 4.8;
+                        if (householdsSelectValue === 'non_self_within_2') taxRateNonSelf = 3.2;
+                        else if (householdsSelectValue === 'non_self_3_to_4') taxRateNonSelf = 3.8;
+                        else if (householdsSelectValue === 'non_self_5_to_6_other') taxRateNonSelf = 4.2;
+                        else if (householdsSelectValue === 'non_self_over_7_other') taxRateNonSelf = 4.8;
                         effectiveTaxRateNonSelf = taxRateNonSelf;
+                        console.log('Tax rate for other_residential:', taxRateNonSelf);
                     } else if (nonSelfType === 'social_rent_public') {
                         taxRateNonSelf = 1.2;
                         effectiveTaxRateNonSelf = 0.75;
                         warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
                     } else if (nonSelfType === 'social_rent_package') {
-                        taxRateNonSelf = 0; // 不計算稅率
-                        effectiveTaxRateNonSelf = 0; // 不計算稅率
+                        taxRateNonSelf = 0;
+                        effectiveTaxRateNonSelf = 0;
                         warnings.push('自113年7月1日起，持有本市供公益出租人出租使用及社會住宅包租代管房屋，將分4年逐年緩步恢復課稅稅基，114年期至116年期房屋稅基分別折減37.5%、25%、12.5%(相當稅率0.75%、0.9%、1.05%)，自117年期起稅基不再折減(恢復法定稅率1.2%)。');
                         warnings.push('臺北市社會住宅興辦及公益出租人出租房屋減免地價稅及房屋稅自治條例刻修法中，依臺北市政府113年9月5日預告修正該自治條例修正草案，擬將本市社會住宅包租代管房屋稅減徵比例，由減徵稅額20%，調整為適用減徵之特定稅率即1.2%。');
                     } else if (nonSelfType === 'personal_rent') {
@@ -605,23 +699,18 @@
                 effectiveTaxRateNonSelf = taxRateNonSelf;
                 nonSelfHouseholds = 0;
             }
-
-            // 處理稅率格式
             effectiveTaxRateSelf = parseFloat(effectiveTaxRateSelf.toFixed(1));
             taxRateSelf = parseFloat(taxRateSelf.toFixed(1));
             if (nonSelfType === 'social_rent_public') {
-                // 公益出租人稅率無條件捨去至小數第二位
                 effectiveTaxRateNonSelf = Math.floor(effectiveTaxRateNonSelf * 100) / 100;
                 taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
             } else if (nonSelfType === 'social_rent_package') {
-                // 社會住宅包租代管房屋稅率顯示為「修法中」
                 effectiveTaxRateNonSelf = '修法中';
                 taxRateNonSelf = '修法中';
             } else {
                 effectiveTaxRateNonSelf = parseFloat(effectiveTaxRateNonSelf.toFixed(1));
                 taxRateNonSelf = parseFloat(taxRateNonSelf.toFixed(1));
             }
-
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
@@ -637,7 +726,7 @@
                     <p>住家用途：非自住</p>
                     <p>非自住類型：${document.getElementById('nonSelfUsage').options[document.getElementById('nonSelfUsage').selectedIndex].text}</p>
                     ${(nonSelfType === 'personal_rent' || nonSelfType === 'public_housing' || nonSelfType === 'worker_dorm' || nonSelfType === 'shared_part' || nonSelfType === 'parking_space' || nonSelfType === 'co_owned' || nonSelfType === 'care_facility' || nonSelfType === 'cultural_asset' || nonSelfType === 'public_construction' || nonSelfType === 'damaged_house' || nonSelfType === 'disaster_relief' || nonSelfType === 'industrial_park' || nonSelfType === 'leasing_management') ? `<p>類別：${document.getElementById('nonSelfSubUsage').options[document.getElementById('nonSelfSubUsage').selectedIndex].text}</p>` : ''}
-                    ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住持有戶數：${nonSelfHouseholds} 戶</p>` : ''}
+                    ${nonSelfType !== 'developer' && !nonCountedTypes.includes(nonSelfType) ? `<p>非自住持有戶數：${displayHouseholds}</p>` : ''}
                     <p>非自住適用稅率：<strong>${effectiveTaxRateNonSelf === '修法中' ? '修法中' : effectiveTaxRateNonSelf + '%'}</strong> ${effectiveTaxRateNonSelf !== taxRateNonSelf && effectiveTaxRateNonSelf !== '修法中' ? `（法定稅率${taxRateNonSelf}%）` : ''}</p>
                 ` : `
                     <p>非住家用途：${document.getElementById('nonResidentialUsage').options[document.getElementById('nonResidentialUsage').selectedIndex].text}</p>
